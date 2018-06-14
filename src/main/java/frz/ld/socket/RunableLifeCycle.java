@@ -3,8 +3,13 @@ package frz.ld.socket;
 /**
  * 线程类的生命周期
  * 
- * 周期基本如下：initInternal ----》 isInit = true ----》 startInternal ----》
- * 循环runInternal操作直到为负 ----》closeInternal
+ * 周期基本如下：
+ * 
+ * 构造时： initInternal ----》 isInit = true
+ * 
+ * 执行start方法时： startInternal ----》循环runInternal操作直到为负
+ * 
+ * 执行close方法时： closeInternal
  * 
  * @author GongTengPangYi
  *
