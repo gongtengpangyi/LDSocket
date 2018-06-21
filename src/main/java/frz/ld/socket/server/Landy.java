@@ -66,6 +66,11 @@ public abstract class Landy extends RunableLifeCycle {
 	protected List<TeddyBearCollection<?>> teddyBearCollections;
 
 	/**
+	 * 最大连接数
+	 */
+	protected int maxConnectCount;
+
+	/**
 	 * 构造器
 	 * 
 	 * @param ip
@@ -93,6 +98,16 @@ public abstract class Landy extends RunableLifeCycle {
 	 */
 	public Landy(String ip, int port) {
 		this(ip, port, DEFAULT_CONNECT_TIMEOUT);
+	}
+
+	/**
+	 * 设置最大连接数
+	 * 
+	 * @param maxConnectCount
+	 *            最大连接数
+	 */
+	public void setMaxConnectCount(int maxConnectCount) {
+		this.maxConnectCount = maxConnectCount;
 	}
 
 	/**

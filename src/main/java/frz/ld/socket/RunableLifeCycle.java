@@ -62,26 +62,10 @@ public abstract class RunableLifeCycle implements LifeCycle, Runnable {
 
 	@Override
 	public void run() {
+		ldLog(threadId() + " is running");
 		while (flag && runInternal()) {
-			if (LifeCycle.DO_LOG) {
-				System.out.println(threadId() + " is running");
-			}
 		}
 	}
-
-	/**
-	 * 线程真实执行服务需要启动的内容
-	 * 
-	 * @return 是否正确启动需要启动的内容
-	 */
-	protected abstract boolean startInternal();
-
-	/**
-	 * 线程关闭时候需要关闭的内容
-	 * 
-	 * @return 是否正确关闭了需要关闭的内容
-	 */
-	protected abstract boolean closeInternal();
 
 	/**
 	 * 线程初始化时候需要执行的操作
@@ -91,6 +75,13 @@ public abstract class RunableLifeCycle implements LifeCycle, Runnable {
 	protected abstract boolean initInternal();
 
 	/**
+	 * 线程真实执行服务需要启动的内容
+	 * 
+	 * @return 是否正确启动需要启动的内容
+	 */
+	protected abstract boolean startInternal();
+
+	/**
 	 * 线程运行过程中执行的操作
 	 * 
 	 * @return 是否继续运行
@@ -98,9 +89,27 @@ public abstract class RunableLifeCycle implements LifeCycle, Runnable {
 	protected abstract boolean runInternal();
 
 	/**
+	 * 线程关闭时候需要关闭的内容
+	 * 
+	 * @return 是否正确关闭了需要关闭的内容
+	 */
+	protected abstract boolean closeInternal();
+
+	/**
 	 * 获取线程的id
 	 * 
 	 * @return
 	 */
 	protected abstract String threadId();
+
+	/**
+	 * 打印日志
+	 * 
+	 * @param str
+	 */
+	protected void ldLog(String str) {
+		if (DO_LOG) {
+			System.out.println(str);
+		}
+	}
 }
