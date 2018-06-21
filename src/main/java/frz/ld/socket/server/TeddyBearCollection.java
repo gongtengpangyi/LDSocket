@@ -12,9 +12,6 @@ import java.util.Set;
  * 与Landy是多对多的关系， 一个集合可以用在不同的Landy对象中（用于不同协议不同服务下的会话的相互传讯）
  * 一个Landy对象也可以有多个集合（用于同协议同服务下的分群组通话）
  * 
- * 由于每个TeddyBear属于一个Collection，且Collection中每个TeddyBear需要相互通信
- * 因此每个Collection中所有的TeddyBear应当遵从同样的数据包解析模式（这个可能还不是非常灵活，但是比同一个landy采用相同解析更靠谱）
- * 
  * @author GongTengPangYi
  * 
  * @param <M>
@@ -29,40 +26,14 @@ public class TeddyBearCollection<M extends Map<Object, TeddyBear<?>>> implements
 	private M realMap;
 
 	/**
-	 * 数据解析
-	 */
-	private LdPackParser packParser;
-
-	/**
 	 * 构造器
 	 * 
 	 * @param realMap
 	 *            实际的map
-	 * @param packParser
-	 *            数据解析器
 	 */
-	public TeddyBearCollection(M realMap, LdPackParser packParser) {
+	public TeddyBearCollection(M realMap) {
 		super();
 		this.realMap = realMap;
-		this.packParser = packParser;
-	}
-
-	/**
-	 * 数据解析
-	 * 
-	 * @return
-	 */
-	public LdPackParser getPackParser() {
-		return packParser;
-	}
-
-	/**
-	 * 数据解析
-	 * 
-	 * @param packParser
-	 */
-	public void setPackParser(LdPackParser packParser) {
-		this.packParser = packParser;
 	}
 
 	@Override

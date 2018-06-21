@@ -1,6 +1,7 @@
 package frz.ld.socket.server;
 
 import frz.ld.socket.RunableLifeCycle;
+import frz.ld.socket.server.core.ReceiveActionExecutor;
 import frz.ld.socket.server.core.SendHelper;
 
 /**
@@ -29,6 +30,8 @@ public abstract class TeddyBear<D extends Landy> extends RunableLifeCycle {
 	 * 所在的Collection分组编号 从0开始 每个TeddyBear只能属于一个Landy的一个Collection。
 	 */
 	protected int collectionIndex;
+	
+	protected ReceiveActionExecutor receiveActionExecutor;
 
 	/**
 	 * 构建器
@@ -39,6 +42,7 @@ public abstract class TeddyBear<D extends Landy> extends RunableLifeCycle {
 	protected TeddyBear(D landy) {
 		super();
 		this.landy = landy;
+		this.receiveActionExecutor = new ReceiveActionExecutor(landy.getPackParser());
 	}
 
 	/**

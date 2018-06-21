@@ -8,7 +8,7 @@ package frz.ld.socket;
  */
 public interface LifeCycle {
 	
-	public static boolean DO_LOG = false;
+	public static boolean DO_LOG = true;
 
 	/**
 	 * 关闭

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import frz.ld.socket.server.Landy;
+import frz.ld.socket.server.LdPackParser;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
@@ -68,12 +69,12 @@ public abstract class NettyLandy extends Landy {
 	 */
 	protected Map<String, NettyTeddyBear<?>> nettyLandyMapByAddress;
 
-	public NettyLandy(String ip, int port) {
-		super(ip, port);
+	public NettyLandy(int port, LdPackParser packParser) {
+		super(port, packParser);
 	}
 
-	public NettyLandy(String ip, int port, long connetTimeout) {
-		super(ip, port, connetTimeout);
+	public NettyLandy(int port, long connetTimeout, LdPackParser packParser) {
+		super(port, connetTimeout, packParser);
 	}
 
 	/**
@@ -100,6 +101,8 @@ public abstract class NettyLandy extends Landy {
 		bossGroup = new NioEventLoopGroup(connThreads);
 		workerGroup = new NioEventLoopGroup();
 
+		server = new ServerBootstrap();
+		
 		server.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)
 				.childHandler(new ChannelInitializer<SocketChannel>() {
 					public void initChannel(SocketChannel ch) throws Exception {
@@ -108,6 +111,8 @@ public abstract class NettyLandy extends Landy {
 					};
 				}).option(ChannelOption.SO_BACKLOG, maxConnectCount).childOption(ChannelOption.SO_KEEPALIVE, true);
 
+		// TODO: 设置timeout
+		
 		return true;
 	}
 
@@ -117,9 +122,10 @@ public abstract class NettyLandy extends Landy {
 
 		try {
 			f = server.bind(port).sync();
-			f.channel().closeFuture().sync();
-
+			
 			ldLog("server in port:" + port + " is start.......");
+			
+			f.channel().closeFuture().sync();
 
 			return true;
 		} catch (InterruptedException e) {

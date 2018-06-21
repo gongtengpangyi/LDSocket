@@ -21,6 +21,8 @@ import frz.ld.socket.RunableLifeCycle;
  * Collection和Landy是多对多关系，即TeddyBear所属什么互通小组和其所连接的server的ip、port无关，只与注册有关
  * 但也可以由开发人员自行规定其为一对一或一对多，即自定义与互通小组与server相关
  * 
+ * 每个Landy对象需要又一个数据解析器，如果需要对一个landy启用不同类型的数据格式，请在解析器中自行完成
+ * 
  * @author GongTengPangYi
  *
  */
@@ -39,11 +41,6 @@ public abstract class Landy extends RunableLifeCycle {
 	public static final void setDEFAULT__TIMEOUT(long dEFAULT__TIMEOUT) {
 		DEFAULT_CONNECT_TIMEOUT = dEFAULT__TIMEOUT;
 	}
-
-	/**
-	 * 开启服务的主机IP
-	 */
-	protected String ip;
 
 	/**
 	 * 开启服务的端口
@@ -71,33 +68,36 @@ public abstract class Landy extends RunableLifeCycle {
 	protected int maxConnectCount;
 
 	/**
+	 * 数据解析
+	 */
+	private LdPackParser packParser;
+
+	/**
 	 * 构造器
 	 * 
-	 * @param ip
-	 *            开启服务的主机IP
 	 * @param port
 	 *            开启服务的端口
 	 * @param connetTimeout
 	 *            服务等待时长
 	 */
-	public Landy(String ip, int port, long connetTimeout) {
+	public Landy(int port, long connetTimeout, LdPackParser packParser) {
 		super();
-		this.ip = ip;
 		this.port = port;
 		this.connetTimeout = connetTimeout;
+		this.packParser = packParser;
 		teddyBearCollections = new ArrayList<>();
 	}
 
 	/**
 	 * 构造器
 	 * 
-	 * @param ip
-	 *            开启服务的主机IP
 	 * @param port
 	 *            开启服务的端口
+	 * @param packParser
+	 *            数据解析器
 	 */
-	public Landy(String ip, int port) {
-		this(ip, port, DEFAULT_CONNECT_TIMEOUT);
+	public Landy(int port, LdPackParser packParser) {
+		this(port, DEFAULT_CONNECT_TIMEOUT, packParser);
 	}
 
 	/**
@@ -105,6 +105,8 @@ public abstract class Landy extends RunableLifeCycle {
 	 * 
 	 * @param maxConnectCount
 	 *            最大连接数
+	 * @param packParser
+	 *            数据解析器
 	 */
 	public void setMaxConnectCount(int maxConnectCount) {
 		this.maxConnectCount = maxConnectCount;
@@ -146,12 +148,21 @@ public abstract class Landy extends RunableLifeCycle {
 	}
 
 	/**
-	 * 设置服务开启的ip
+	 * 数据解析
 	 * 
-	 * @param ip
+	 * @return
 	 */
-	public void setIp(String ip) {
-		this.ip = ip;
+	public LdPackParser getPackParser() {
+		return packParser;
+	}
+
+	/**
+	 * 数据解析
+	 * 
+	 * @param packParser
+	 */
+	public void setPackParser(LdPackParser packParser) {
+		this.packParser = packParser;
 	}
 
 	/**
